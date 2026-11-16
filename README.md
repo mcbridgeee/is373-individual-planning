@@ -15,7 +15,7 @@ IS373-001, Fall 2026. This is my evolving individual record for the two individu
 
 | Item | Link | Status |
 | --- | --- | --- |
-| Three employer posting records | [Postings](1-portfolio-career.md#employer-posting-records) | planned |
+| Three employer posting records | [Postings](1-portfolio-career.md#employer-posting-records) | in progress: postings chosen and checked Nov 15; my analysis pending |
 | Comparison of two directions | [Comparison](1-portfolio-career.md#comparing-two-directions) | planned |
 | Target role and reader | [Reader](1-portfolio-career.md#target-role-and-reader) | planned |
 | Responsibility-to-evidence map | [Evidence map](1-portfolio-career.md#responsibility-to-evidence-map) | planned |
