@@ -70,11 +70,17 @@ Requirement: about five short permitted documents. Each needs a stable ID, origi
 
 | ID | Title / author | Year written | Edition or translation used (year) | URL | Permission / why public domain | Portion used | Date checked |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| S01 | | | | | | | |
-| S02 | | | | | | | |
-| S03 | | | | | | | |
-| S04 | | | | | | | |
-| S05 | | | | | | | |
+| S01 | *The Castel of Helthe*, Sir Thomas Elyot | 1539 | EEBO-TCP transcription of the 1539 printing (Huntington Library copy) | https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/A21293 | Text from 1539; transcription released CC0 1.0 (public domain dedication) | Book 1: the four humours and "complexions" (planned) | 2026-11-15 |
+| S02 | *The Anatomy of Melancholy*, Robert Burton | 1621 | Project Gutenberg eBook #10800 (later edition; exact base edition to confirm) | https://www.gutenberg.org/ebooks/10800 | Public domain in the USA (Project Gutenberg) | Partition 1: causes and symptoms of melancholy (planned) | 2026-11-15 |
+| S03 | *An Anatomical Disquisition on the Motion of the Heart and Blood in Animals*, William Harvey | 1628 | Robert Willis English translation, Everyman's Library edition (1906); Project Gutenberg #67065 | https://www.gutenberg.org/ebooks/67065 | Public domain in the USA (Project Gutenberg) | Chapters on the circulation of the blood (planned) | 2026-11-15 |
+| S04 | *The Complete Herbal*, Nicholas Culpeper | 1653 | Project Gutenberg eBook #49513 (later reprint; exact edition to confirm) | https://www.gutenberg.org/ebooks/49513 | Public domain in the USA (Project Gutenberg) | Introduction and about 10 common herbs (planned) | 2026-11-15 |
+| S05 | *Certain Necessary Directions as well for the Cure of the Plague as for Preventing the Infection*, College of Physicians of London | 1665 | EEBO-TCP / EarlyPrint transcription (A31495) | https://distantreader.org/stacks/earlyprint/txt/A31495.txt | Text from 1665; EEBO-TCP transcriptions are public domain (CC0); confirm on the EEBO-TCP record | Full pamphlet (short) | 2026-11-15 |
+
+**Why these five:** together they span 1539 to 1665, and Harvey's 1628 discovery that blood circulates falls in the middle, so changing the year visibly changes what the physician knows.
+
+**Known limits:**
+- The year filter uses the **first publication year**, but S02 to S04 are later editions or translations. Later editions may include additions, and Harvey's text is in 1840s English, not 1628 wording. I record this rather than hide it.
+- Early modern spelling in S01 and S05 ("helthe," "humours") will affect keyword search; that is part of my keyword vs. vector comparison.
 
 ## Proposed flow (planned)
 
@@ -97,12 +103,12 @@ _Planned sketch, not an executed test._
 
 | Step | What happens to one passage |
 | --- | --- |
-| Source passage (S0x, location) | |
-| Chunk or graph representation | |
-| Question that should retrieve it | |
-| Expected retrieved IDs | |
-| Expected answer | |
-| What a missing or wrong retrieval would look like | |
+| Source passage (S0x, location) | S02 (Burton, 1621), a passage in Partition 1 on black bile as a cause of melancholy. Exact section to record once imported |
+| Chunk or graph representation | Paragraph chunk with ID `S02-C###`, metadata: source S02, year 1621, section, paragraph number; embedded with all-MiniLM-L6-v2 and stored in Chroma |
+| Question that should retrieve it | "Why do I feel sad all the time for no reason?" with the year set to 1640 |
+| Expected retrieved IDs | S02 chunks about melancholy and black bile; possibly S01 (Elyot on the melancholic complexion) |
+| Expected answer | A period explanation: an excess of black bile, with Burton's suggested remedies, plus links to the S02 passages used |
+| What a missing or wrong retrieval would look like | Retrieves Culpeper herbs unrelated to sadness; or the answer mentions modern ideas (serotonin, depression as a diagnosis) that no retrieved passage contains. That is the anachronism I check for |
 
 ## Evaluation questions
 
@@ -110,21 +116,21 @@ Written before running anything. Expected sources are predictions.
 
 | # | Type | Question | Year setting | Expected source IDs | Expected behavior | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| Q1 | Exact term | | | | | planned |
-| Q2 | Paraphrase | | | | | planned |
-| Q3 | Relationship | | | | | planned |
-| Q4 | Ordinary useful | | | | | planned |
-| Q5 | Unanswerable | | | none | Says the texts do not cover it; no modern knowledge | planned |
+| Q1 | Exact term | What is black bile? | 1630 | S01, S02 | Defines black bile as cold and dry, linked to melancholy, with citations | planned |
+| Q2 | Paraphrase | Why do I feel sad all the time for no reason? | 1640 | S02 (maybe S01) | Finds "melancholy" passages despite no shared words; keyword search expected to miss this | planned |
+| Q3 | Relationship | Which humour is linked to autumn, and what qualities does it have? | 1600 | S01 | Connects humour, season and qualities from one source; tests whether chunks keep those links together | planned |
+| Q4 | Ordinary useful (year switch) | What does the heart do? | 1600, then 1650 | 1600: S01 only. 1650: S03 | At 1600, no mention of blood circulating. At 1650, describes circulation from Harvey. The answers should differ | planned |
+| Q5 | Unanswerable | Should I get a vaccine to protect me from the plague? | 1665 | none | Says the texts do not cover vaccines; may describe the plague advice in S05 but must not invent vaccines or germs | planned |
 
 ## Stories and checks
 
 | # | Story (As a ___, I want ___, so ___) | Observable check | Status |
 | --- | --- | --- | --- |
-| 1 | | | planned |
-| 2 | | | planned |
-| 3 | | | planned |
-| 4 | | | planned |
-| 5 | | | planned |
+| 1 | As a curious reader, I want to pick a year before asking, so the answer reflects only what was known then | Q4 at 1600 retrieves no S03 chunks; at 1650 it does | planned |
+| 2 | As a curious reader, I want to see which passages an answer came from, so I can read the original text | Every answer shows source IDs that open the cited passage | planned |
+| 3 | As a curious reader, I want an honest reply when the old texts don't cover my question, so I'm not fooled by invented history | Q5 returns a "not covered by these texts" reply with no vaccines or germs | planned |
+| 4 | As the site owner, I want re-importing the same texts to change nothing, so the database stays clean | Importing twice keeps the same chunk count and IDs | planned |
+| 5 | As the site owner, I want only me to import or delete sources, so visitors can't change the library | A visitor's request to the import action is refused | planned |
 
 Checks to include somewhere: repeat import creates no duplicates; changing the year changes which sources can be retrieved; a missing-evidence question gets an honest "not covered"; a public visitor cannot use import/admin actions.
 
