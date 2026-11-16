@@ -27,14 +27,14 @@ IS373-001, Fall 2026. This is my evolving individual record for the two individu
 | Item | Link | Status |
 | --- | --- | --- |
 | Reader, task and research question | [Reader](2-rag-technical.md#reader-and-question) | done |
-| Technical sources | [Sources](2-rag-technical.md#technical-research-sources) | planned |
-| Vector vs graph vs keyword comparison | [Comparison](2-rag-technical.md#comparing-retrieval-approaches) | planned |
-| Chosen architecture | [Decision](2-rag-technical.md#architecture-decision) | planned |
+| Technical sources | [Sources](2-rag-technical.md#technical-research-sources) | done |
+| Vector vs graph vs keyword comparison | [Comparison](2-rag-technical.md#comparing-retrieval-approaches) | done |
+| Chosen architecture | [Decision](2-rag-technical.md#architecture-decision) | done |
 | Permitted source manifest | [Manifest](2-rag-technical.md#source-manifest) | planned |
 | Sample representation and trace | [Trace](2-rag-technical.md#one-source-traced-end-to-end) | planned |
 | Five evaluation questions | [Questions](2-rag-technical.md#evaluation-questions) | planned |
 | Stories and checks | [Stories](2-rag-technical.md#stories-and-checks) | planned |
-| Hosting, cost and resource limits | [Hosting](2-rag-technical.md#hosting-cost-and-limits) | planned |
+| Hosting, cost and resource limits | [Hosting](2-rag-technical.md#hosting-cost-and-limits) | done |
 
 ## Decision trail
 

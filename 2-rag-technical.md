@@ -25,9 +25,12 @@
 
 | # | Source (title, author) | URL | Date checked | What I used it for |
 | --- | --- | --- | --- | --- |
-| T1 | | | | |
-| T2 | | | | |
-| T3 | | | | |
+| T1 | Lewis et al., "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (2020) | https://arxiv.org/abs/2005.11401 | 2026-11-15 | What RAG is: retrieve evidence first, then generate from it |
+| T2 | Chroma documentation | https://docs.trychroma.com/docs/overview/introduction | 2026-11-15 | Vector database choice: stores chunks, embeddings and metadata; supports metadata filters (my year filter) |
+| T3 | Neo4j, graph database concepts | https://neo4j.com/docs/getting-started/graph-database/ | 2026-11-15 | How a knowledge graph stores entities and typed relationships |
+| T4 | SQLite FTS5 full-text search | https://sqlite.org/fts5.html | 2026-11-15 | Keyword baseline to compare against |
+| T5 | Course RAG guides: embeddings, chunking, AI costs (Williams, IS373 RAG repo) | https://github.com/kaw393939/is373-rag/tree/main/docs/students | 2026-11-15 | Chunking trade-offs, free model options (Groq, Gemini), token budgeting |
+| T6 | Groq rate limits and models | https://console.groq.com/docs/rate-limits | 2026-11-15 | Free-tier limits for generation |
 
 Primary sources suggested in the course handout: PostgreSQL full-text search, Qdrant vector search and filtering, Neo4j graph databases and vector indexes, Lewis et al. 2020 (original RAG paper).
 
@@ -45,20 +48,21 @@ Primary sources suggested in the course handout: PostgreSQL full-text search, Qd
 
 | Approach | What it would do for my questions | Where it fails for my content | Cost / complexity |
 | --- | --- | --- | --- |
-| Keyword baseline (SQLite FTS / Postgres full-text) | | | |
-| Vector | | | |
-| Graph | | | |
-| Both | | | |
+| Keyword baseline (SQLite FTS5) | Finds exact terms like "black bile," "melancholy" or "Galen" | Misses paraphrases ("why am I always sad?"); early modern spelling ("physick," "humour") breaks exact matches | Lowest. Built into SQLite |
+| Vector (Chroma) | Finds passages by meaning, so a modern question can reach 1600s wording; year stored as metadata lets me filter to sources printed by the chosen year | Only knows what is *similar*, not how things connect; can return a passage that sounds related but doesn't answer the question | Low. pip install, local storage, free built-in embedding model |
+| Graph (e.g. Neo4j) | Follows chains in humoral theory: humor → qualities (hot/cold, wet/dry) → season → organ → temperament. Strong for "which season is worst for someone with too much black bile?" | Every relationship has to be extracted and checked against the texts; AI extraction can invent or modernize facts; a graph database is heavy for a small droplet | High. Extraction, checking, and running another database |
+| Both | Vector for passages, graph for relationship questions | More moving parts to build, debug and explain in 9 days | Highest |
 
 ## Architecture decision
 
-- **Choice:** vector / graph / both
-- **Why it fits my questions:**
-- **What the keyword baseline can already do:**
-- **Expected benefit, and how I will check it:**
-- **Smaller fallback if it does not work by Build:**
+- **Choice:** vector retrieval (Chroma) with a publication-year filter. Graph researched and compared, not implemented at Build.
+- **Why it fits my questions:** most questions are everyday ones ("why do I get headaches?") that need meaning-based search across old wording. The year filter, not the graph, is what makes the app work, and vector metadata filters handle it directly. This keeps the project small enough to build and test well by Nov 24.
+- **What the keyword baseline can already do:** exact-term questions. I'll run the same five questions through keyword search and vector search and record where each one fails, especially paraphrases and old spellings.
+- **Expected benefit, and how I will check it:** vector search should retrieve the right passages for paraphrased questions where keyword search misses. Checked with the five evaluation questions, comparing retrieved source IDs to my expected sources.
+- **Smaller fallback if it does not work by Build:** keyword-only retrieval with the year filter, clearly labeled as the baseline, while I fix vector retrieval.
+- **Graph as a later experiment (optional, after Build):** a small hand-checked list of humoral relationships (about 30), each tied to its source passage, used to answer relationship questions. Only if time allows; labeled planned until built.
 
-**Design experiment (one bounded comparison):** _e.g. chunk by heading/paragraph vs fixed length, or answer presentation: citations inline vs beside the chat._
+**Design experiment (one bounded comparison):** chunking by paragraph vs. fixed length (about 500 characters). Same five questions, compare which retrieves the expected passages and where a split cuts an answer in half.
 
 ## Source manifest
 
@@ -126,14 +130,14 @@ Checks to include somewhere: repeat import creates no duplicates; changing the y
 
 ## Hosting, cost and limits
 
-- **Server:** existing DigitalOcean droplet (memory / disk: ___ )
-- **App base:** reuse my App Studio FastAPI app? ___
-- **Database:**
-- **Embedding model:**
-- **Generation model / provider:**
-- **Cost cap and request limits:**
-- **Where keys live:** server environment only, never in Git
-- **Safety:** clear "historical simulation, not medical advice" label; response for real health questions:
+- **Server:** existing DigitalOcean droplet (bmctiernan.com) with Docker, Traefik and HTTPS. Memory and disk: check before Build (planned)
+- **App base:** extend my App Studio FastAPI app with one new route for questions
+- **Database:** Chroma (vector) with data saved to a Docker volume so it survives restarts
+- **Embedding model:** Chroma's default all-MiniLM-L6-v2 (runs on the server, free, no API key)
+- **Generation model / provider:** Groq free tier (openai/gpt-oss-20b); Gemini free API as backup
+- **Cost cap and request limits:** free tiers only; max 5 retrieved chunks and about 500 output tokens per answer; per-visitor rate limit on the public demo; importing sources only through an admin command, never a public page
+- **Where keys live:** server environment only, never in Git or front-end code
+- **Safety:** clear "historical simulation, not medical advice" label; real health questions get a reply to see a modern doctor
 
 ## Open questions for the instructor
 
