@@ -110,30 +110,33 @@ Requirement: three original employer postings, at least two role families, FDE i
 
 | Employer responsibility (posting #) | Evidence I can show | Exists now or planned? |
 | --- | --- | --- |
-| | | |
-| | | |
-| | | |
+| Plan, run and synthesize research from discovery to validation (P2) | Fiserv UX research internship; Dinner Diaries diary study | Exists |
+| Evaluate AI-enabled tools and check AI output against source data (P2); build evaluation tools for accuracy and safety (P1) | RAG app evaluation: five questions with expected sources, citation checks, missing-evidence answers, peer test and retest | Planned (Build Nov 24, Release Dec 3) |
+| Build AI applications and connect them to real systems (P1) | RAG app hosted on my own server with Docker, Traefik, HTTPS and CI/CD; AI chat tool built at Fiserv | Server and CI exist; RAG app planned |
+| Align a team and keep shared work on track (P3) | Group content system: task owners, reviewers and my named contribution | Planned (group project) |
 
 ## Portfolio page outline
 
 Required content: accurate introduction, individual RAG case study with a link to the working app, group case study naming my own contribution, code/demo links, resume / GitHub / LinkedIn links, and a professional contact route. Public pages must work without making a recruiter create an account.
 
-1. Introduction and direction:
-2. RAG app case study:
-3. Group system case study (my contribution):
-4. Other work:
-5. Resume / GitHub / LinkedIn / contact:
+**Planned URL:** portfolio.bmctiernan.com on my existing DigitalOcean server (planned; not built yet).
+
+1. **Home:** one-line direction (UX researcher on AI products), short intro, links to case studies and contact.
+2. **RAG app case study:** problem and reader, research and architecture choice, evaluation results, what I changed after peer testing, link to the working app and code.
+3. **Group system case study:** the problem, our workflow, and my named contribution with links.
+4. **Research case studies:** Dinner Diaries diary study; Fiserv UX research internship (only what I'm allowed to share).
+5. **About, resume, GitHub, LinkedIn and email.**
 
 ## Two lightweight layouts
 
-Same content, two treatments. Sketches or wireframes are enough; I do not build two sites.
+Same content, two treatments. Wireframes only; I do not build two sites.
 
-| | Layout A: | Layout B: |
+| | Layout A: evidence-first | Layout B: story-first |
 | --- | --- | --- |
-| Sketch / link | | |
-| What the reader sees first | | |
-| Strength | | |
-| Weakness | | |
+| Wireframe | ![Layout A](images/layout-a-evidence-first.svg) | ![Layout B](images/layout-b-story-first.svg) |
+| What the reader sees first | One-line direction, then a grid of four case studies | A large intro about me and my path, then how I work, then one featured case study |
+| Strength | A busy reviewer reaches work in one click; every project gets equal weight | Explains my non-traditional path and research process; puts the RAG app in front |
+| Weakness | Less personality; my story is pushed down to a short About | Case studies sit lower, so a skimming reviewer may leave before seeing work |
 
 **Choice and reason:**
 

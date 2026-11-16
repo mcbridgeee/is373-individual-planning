@@ -18,9 +18,9 @@ IS373-001, Fall 2026. This is my evolving individual record for the two individu
 | Three employer posting records | [Postings](1-portfolio-career.md#employer-posting-records) | done, checked Nov 15 |
 | Comparison of two directions | [Comparison](1-portfolio-career.md#comparing-two-directions) | done (provisional) |
 | Target role and reader | [Reader](1-portfolio-career.md#target-role-and-reader) | done (provisional) |
-| Responsibility-to-evidence map | [Evidence map](1-portfolio-career.md#responsibility-to-evidence-map) | planned |
-| Portfolio page outline | [Outline](1-portfolio-career.md#portfolio-page-outline) | planned |
-| Two layouts and decision | [Layouts](1-portfolio-career.md#two-lightweight-layouts) | planned |
+| Responsibility-to-evidence map | [Evidence map](1-portfolio-career.md#responsibility-to-evidence-map) | done |
+| Portfolio page outline | [Outline](1-portfolio-career.md#portfolio-page-outline) | done |
+| Two layouts and decision | [Layouts](1-portfolio-career.md#two-lightweight-layouts) | wireframes done; choice pending |
 
 ### 2. RAG app + technical research
 
