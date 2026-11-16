@@ -6,9 +6,9 @@
 
 ## Changed / checked / next
 
-- **Changed:**
-- **Checked:**
-- **Next:**
+- **Changed (Plan, Nov 16):** switched concept from a historical-medicine app to a therapist session-notes assistant (see decision trail); researched RAG, chunking, embeddings, vector and graph retrieval; chose vector retrieval (Chroma) with session metadata and a keyword baseline; wrote six synthetic session transcripts; wrote six evaluation questions with expected sessions.
+- **Checked:** ran keyword searches over the six transcripts to confirm the planted facts. Confirmed session 2 never uses the word "sleep" (so keyword search misses it for Q2), no transcript contains "diagnosis" or "disorder" (Q5), and "panic attack" appears 11 times across 5 sessions while the true count is 3 (Q6). No app or retrieval tests have run yet; all other checks are planned.
+- **Next:** by Build (Nov 24), host a small working version on my server: import the six transcripts, retrieve with Chroma, answer with Groq and show session citations. Then run Q1 to Q6 against both keyword and vector retrieval.
 
 ## Reader and question
 

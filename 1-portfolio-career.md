@@ -6,9 +6,9 @@
 
 ## Changed / checked / next
 
-- **Changed:**
-- **Checked:**
-- **Next:**
+- **Changed (Plan, Nov 16):** recorded three employer postings across three role families (FDE, UX research on AI, product management); compared UX research and PM; chose UX research on AI products as my provisional direction and a UX research hiring manager as my reader; mapped responsibilities to evidence; outlined the portfolio; chose story-first Layout B.
+- **Checked:** opened all three original postings on 2026-11-15 and confirmed they were live, with eligibility and qualifications recorded from the employer pages. No portfolio checks have run yet; site checks below are planned.
+- **Next:** build the portfolio foundation at portfolio.bmctiernan.com by Build (Nov 24): intro, direction, navigation and case study placeholders labeled as in progress.
 
 ## Employer posting records
 
