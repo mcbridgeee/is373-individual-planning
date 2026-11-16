@@ -26,7 +26,7 @@ IS373-001, Fall 2026. This is my evolving individual record for the two individu
 
 | Item | Link | Status |
 | --- | --- | --- |
-| Reader, task and research question | [Reader](2-rag-technical.md#reader-and-question) | planned |
+| Reader, task and research question | [Reader](2-rag-technical.md#reader-and-question) | done |
 | Technical sources | [Sources](2-rag-technical.md#technical-research-sources) | planned |
 | Vector vs graph vs keyword comparison | [Comparison](2-rag-technical.md#comparing-retrieval-approaches) | planned |
 | Chosen architecture | [Decision](2-rag-technical.md#architecture-decision) | planned |

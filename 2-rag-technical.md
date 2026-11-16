@@ -15,10 +15,11 @@
 **Working concept (proposed):** a "physician from another year." The user picks a year and asks a health question. The app answers only from medical texts printed by that year, in that period's terms, with citations to the actual passages.
 
 - **Era (proposed):** England, about 1540 to 1670 (humoral medicine through Harvey's circulation of the blood).
-- **Reader:**
-- **Useful question they bring:**
-- **Sentence:** My application helps [reader] answer [type of question] using [permitted content].
-- **Why RAG fits:** the model must answer only from the period sources, not from what it already knows about modern medicine.
+- **Reader:** history enthusiasts and curious people who want to see how people in the past understood the body and illness, and what an AI might have sounded like if it had been trained only on that era's knowledge.
+- **Useful question they bring:** "If I lived in [year], what would a physician have told me about [symptom or condition], and why did they believe it?"
+- **Sentence:** My application helps history-curious readers explore how a physician in a chosen year would have explained health and illness, using public-domain medical texts printed by that year.
+- **Why RAG fits:** a general chatbot mixes in modern knowledge. Limiting retrieval to sources printed by the chosen year keeps answers true to the period, and showing the source passage lets the reader check it. Evaluation focuses on anachronism: did the answer use knowledge the period texts don't contain?
+- **Scope:** for curiosity and learning only. This is a historical simulation, not medical advice.
 
 ## Technical research sources
 
