@@ -153,5 +153,5 @@ Written before running anything. Expected sessions come from the content I plant
 
 ## Help received
 
-- AI:
-- People:
+- AI: Claude helped me compare retrieval approaches, research tools and costs, structure this record and check my transcripts against the evaluation questions. I wrote and edited the transcripts with AI assistance and chose the concept and architecture.
+- People: none yet. A peer trace of one source through the plan is planned for the Nov 17/19 workshop.

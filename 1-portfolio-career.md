@@ -144,13 +144,13 @@ Same content, two treatments. Wireframes only; I do not build two sites.
 
 | Check | Expected result | Status |
 | --- | --- | --- |
-| Peer can name my target role from the homepage without help | | planned |
-| Peer can find evidence of one skill | | planned |
-| Peer can open a featured project | | planned |
-| Keyboard navigation reaches every link | | planned |
-| Readable at phone width | | planned |
+| Peer can name my target role from the homepage without help | Says "UX research on AI products" within about 30 seconds | planned |
+| Peer can find evidence of one skill | Opens a case study that shows a research method and its result | planned |
+| Peer can open a featured project | Reaches the RAG case study from the homepage in one or two clicks | planned |
+| Keyboard navigation reaches every link | Tab reaches every link and button in order, with a visible focus outline | planned |
+| Readable at phone width | No sideways scrolling and readable text at 375 px wide | planned |
 
 ## Help received
 
-- AI:
-- People:
+- AI: Claude helped me find and verify current postings, summarize their responsibilities, draft the comparison wording and draw the layout wireframes. I checked the postings myself and made the direction, reader and layout decisions.
+- People: none yet. A peer review of my reader and evidence is planned for the Nov 17/19 workshop.
