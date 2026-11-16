@@ -6,8 +6,8 @@
 
 ## Changed / checked / next
 
-- **Changed (Plan, Nov 16):** switched concept from a historical-medicine app to a therapist session-notes assistant (see decision trail); researched RAG, chunking, embeddings, vector and graph retrieval; chose vector retrieval (Chroma) with session metadata and a keyword baseline; wrote six synthetic session transcripts; wrote six evaluation questions with expected sessions.
-- **Checked:** ran keyword searches over the six transcripts to confirm the planted facts. Confirmed session 2 never uses the word "sleep" (so keyword search misses it for Q2), no transcript contains "diagnosis" or "disorder" (Q5), and "panic attack" appears 11 times across 5 sessions while the true count is 3 (Q6). No app or retrieval tests have run yet; all other checks are planned.
+- **Changed (Plan, Nov 16):** switched concept from a historical-medicine app to a therapist session-notes assistant (see decision trail); researched RAG, chunking, embeddings, vector and graph retrieval; chose vector retrieval (Chroma) with session metadata and a keyword baseline; wrote six synthetic session transcripts, then rewrote them as timestamped transcript exports (no stage directions, quieter therapist, filler speech and off-topic tangents) with the planted facts unchanged; wrote six evaluation questions with expected sessions.
+- **Checked:** ran keyword searches over the six transcripts to confirm the planted facts. Confirmed session 2 never uses the word "sleep" (so keyword search misses it for Q2), no transcript contains "diagnosis" or "disorder" (Q5), and "panic attack" appears 8 times across 5 sessions while the true count is 3 (Q6). Rechecked all of these after the Nov 16 rewrite; Ashley now also comes up in passing in S02 and S03. No app or retrieval tests have run yet; all other checks are planned.
 - **Next:** by Build (Nov 24), host a small working version on my server: import the six transcripts, retrieve with Chroma, answer with Groq and show session citations. Then run Q1 to Q6 against both keyword and vector retrieval.
 
 ## Reader and question
@@ -124,7 +124,7 @@ Written before running anything. Expected sessions come from the content I plant
 | Q3 | Relationship over time | How has the client's relationship with their sister changed? | S01, S04, S05, S06 | In order: close but holding back (S01), argument (S04), dog-photo peace offering and journaling about it (S05), reconciled over coffee (S06) | planned |
 | Q4 | Ordinary useful | What coping strategies have we tried, and how did they go? | S02, S03, S04, S05, S06 | 4-4-6 breathing (helped a little, didn't help after the argument, helps when used early); journaling (helped her let go and sleep); medication (lowered baseline) | planned |
 | Q5 | Unanswerable | What is the client's diagnosis? | none | Says no diagnosis is recorded. Checked: no transcript contains "diagnosis" or "disorder." Must not suggest one (e.g. "panic disorder") | planned |
-| Q6 | Counting experiment | How many panic attacks has the client reported? | S01, S03, S05 (correct answer: 3) | Checked: the phrase "panic attack" appears **11 times across 5 sessions**, including "zero panic attacks" in S06. So a keyword count of mentions is wrong, and RAG may also miscount. Recorded as a finding | planned |
+| Q6 | Counting experiment | How many panic attacks has the client reported? | S01, S03, S05 (correct answer: 3) | Checked: the phrase "panic attack" appears **8 times across 5 sessions**, including "almost two weeks without a panic attack" in S06. So a keyword count of mentions is wrong, and RAG may also miscount. Recorded as a finding | planned |
 
 ## Stories and checks
 
