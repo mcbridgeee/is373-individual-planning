@@ -33,12 +33,13 @@ Primary sources suggested in the course handout: PostgreSQL full-text search, Qd
 
 ## Key concepts in my own words
 
-- **RAG:**
-- **Chunking:**
-- **Embeddings:**
-- **Vector search:**
-- **Graph (entities and typed relationships):**
-- **Content import (manifest, dedupe, stable IDs):**
+- **RAG:** When a user asks something, the app first searches my permitted sources for the most relevant passages, then gives only those passages to the model to answer from. This keeps answers grounded in real evidence and reduces hallucination, though it doesn't eliminate it, so I test for it.
+- **Chunking:** Splitting each document into smaller passages, like paragraphs, before storing them. The app retrieves only the few chunks that match a question instead of a whole book. Too big brings in irrelevant text; too small loses context.
+- **Embeddings / vector search:** An embedding turns a passage into a list of numbers that places it in a "vector space," where similar meanings sit close together (the classic example: king − man + woman ≈ queen). Vector search finds the passages closest to the question's meaning, so "always feeling sad" can find a passage about "melancholy."
+- **Graph (entities and typed relationships):** A knowledge graph stores things as points (like black bile, autumn, the spleen) connected by labeled arrows that state facts ("black bile *is linked to* autumn"), each tied to the passage that says it. It's good for questions that follow a chain of relationships, which vector search can't do because it only knows what's *similar*, not how things connect.
+- **Content import (manifest, dedupe, stable IDs):** Bringing each source into the system with a stable ID, its year, edition and permission, without creating duplicates when I import it again. The year is what lets the app show only what was known by the chosen date.
+
+**Main risk for this app:** the model already knows modern medicine from its training data. Retrieval limited by year, plus instructions to answer only from the passages, is how I try to keep that knowledge out, and my evaluation checks whether it leaks anyway.
 
 ## Comparing retrieval approaches
 
