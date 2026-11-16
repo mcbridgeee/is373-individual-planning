@@ -12,89 +12,92 @@
 
 ## Reader and question
 
-**Working concept (proposed):** a "physician from another year." The user picks a year and asks a health question. The app answers only from medical texts printed by that year, in that period's terms, with citations to the actual passages.
+**Concept (proposed): a session-notes assistant for therapists.** A therapist uploads session transcripts (exported from the tool they already record with, such as Zoom or Otter). The app lets them ask questions across a client's history, like "Has the client ever mentioned their sister?", and answers only from the transcripts, with links to the exact sessions and passages.
 
-- **Era (proposed):** England, about 1540 to 1670 (humoral medicine through Harvey's circulation of the blood).
-- **Reader:** history enthusiasts and curious people who want to see how people in the past understood the body and illness, and what an AI might have sounded like if it had been trained only on that era's knowledge.
-- **Useful question they bring:** "If I lived in [year], what would a physician have told me about [symptom or condition], and why did they believe it?"
-- **Sentence:** My application helps history-curious readers explore how a physician in a chosen year would have explained health and illness, using public-domain medical texts printed by that year.
-- **Why RAG fits:** a general chatbot mixes in modern knowledge. Limiting retrieval to sources printed by the chosen year keeps answers true to the period, and showing the source passage lets the reader check it. Evaluation focuses on anachronism: did the answer use knowledge the period texts don't contain?
-- **Scope:** for curiosity and learning only. This is a historical simulation, not medical advice.
+- **Reader:** a therapist or counselor preparing for a session who needs to recall what a client said weeks ago without rereading every transcript.
+- **Useful question they bring:** "What has this client said about [person, symptom or coping strategy], and in which sessions?"
+- **Sentence:** My application helps therapists find what a client has said across past sessions, using uploaded session transcripts, with every answer linked to the session it came from.
+- **Why RAG fits:** the answer has to come from *this client's* sessions, not from general knowledge about therapy. A general chatbot would fill gaps with plausible-sounding details, which is dangerous in a clinical record. Every claim must point to a passage the therapist can check.
+- **Scope:** all transcripts are **fictional and labeled synthetic**. This is a class prototype, not a clinical tool. It does not diagnose, and it is not for real patient data.
+
+### Decision trail: why I changed concepts
+
+I first planned a "physician from another year" app using public-domain medical texts from 1539 to 1665. It was small and safe, but it did not connect to the work I want to do. I switched to this concept because it matches my target role (UX research on AI products): AI note tools for clinicians are a real product area, and evaluating whether an AI's answers are supported by a record is a research problem. I also considered a mental-health advice chatbot for patients and rejected it: most clinical references (including the DSM-5) are copyrighted, and safely handling someone in crisis is beyond what I can build and test in this course.
 
 ## Technical research sources
 
 | # | Source (title, author) | URL | Date checked | What I used it for |
 | --- | --- | --- | --- | --- |
 | T1 | Lewis et al., "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" (2020) | https://arxiv.org/abs/2005.11401 | 2026-11-15 | What RAG is: retrieve evidence first, then generate from it |
-| T2 | Chroma documentation | https://docs.trychroma.com/docs/overview/introduction | 2026-11-15 | Vector database choice: stores chunks, embeddings and metadata; supports metadata filters (my year filter) |
+| T2 | Chroma documentation | https://docs.trychroma.com/docs/overview/introduction | 2026-11-15 | Vector database choice: stores chunks, embeddings and metadata; supports metadata filters (session number, date) |
 | T3 | Neo4j, graph database concepts | https://neo4j.com/docs/getting-started/graph-database/ | 2026-11-15 | How a knowledge graph stores entities and typed relationships |
-| T4 | SQLite FTS5 full-text search | https://sqlite.org/fts5.html | 2026-11-15 | Keyword baseline to compare against |
+| T4 | SQLite FTS5 full-text search | https://sqlite.org/fts5.html | 2026-11-15 | Keyword baseline, and exact counting of mentions |
 | T5 | Course RAG guides: embeddings, chunking, AI costs (Williams, IS373 RAG repo) | https://github.com/kaw393939/is373-rag/tree/main/docs/students | 2026-11-15 | Chunking trade-offs, free model options (Groq, Gemini), token budgeting |
 | T6 | Groq rate limits and models | https://console.groq.com/docs/rate-limits | 2026-11-15 | Free-tier limits for generation |
-
-Primary sources suggested in the course handout: PostgreSQL full-text search, Qdrant vector search and filtering, Neo4j graph databases and vector indexes, Lewis et al. 2020 (original RAG paper).
 
 ## Key concepts in my own words
 
 - **RAG:** When a user asks something, the app first searches my permitted sources for the most relevant passages, then gives only those passages to the model to answer from. This keeps answers grounded in real evidence and reduces hallucination, though it doesn't eliminate it, so I test for it.
-- **Chunking:** Splitting each document into smaller passages, like paragraphs, before storing them. The app retrieves only the few chunks that match a question instead of a whole book. Too big brings in irrelevant text; too small loses context.
-- **Embeddings / vector search:** An embedding turns a passage into a list of numbers that places it in a "vector space," where similar meanings sit close together (the classic example: king − man + woman ≈ queen). Vector search finds the passages closest to the question's meaning, so "always feeling sad" can find a passage about "melancholy."
-- **Graph (entities and typed relationships):** A knowledge graph stores things as points (like black bile, autumn, the spleen) connected by labeled arrows that state facts ("black bile *is linked to* autumn"), each tied to the passage that says it. It's good for questions that follow a chain of relationships, which vector search can't do because it only knows what's *similar*, not how things connect.
-- **Content import (manifest, dedupe, stable IDs):** Bringing each source into the system with a stable ID, its year, edition and permission, without creating duplicates when I import it again. The year is what lets the app show only what was known by the chosen date.
+- **Chunking:** Splitting each document into smaller passages before storing them. The app retrieves only the few chunks that match a question instead of a whole transcript. Too big brings in irrelevant text; too small loses context (for example, a client's answer separated from the therapist's question).
+- **Embeddings / vector search:** An embedding turns a passage into a list of numbers that places it in a "vector space," where similar meanings sit close together (the classic example: king − man + woman ≈ queen). Vector search finds the passages closest to the question's meaning, so "trouble sleeping" can find a passage where the client says "I was up until 3 a.m. again."
+- **Graph (entities and typed relationships):** A knowledge graph stores things as points (like the client, their sister, a coping strategy) connected by labeled arrows that state facts ("client *argued with* sister," "client *tried* breathing exercises"), each tied to the passage that says it. It's good for questions that follow a chain of relationships, which vector search can't do because it only knows what's *similar*, not how things connect.
+- **Content import (manifest, dedupe, stable IDs):** Bringing each transcript into the system with a stable ID, session number, date and permission, without creating duplicates when I import it again. The session number and date are what let the app say *when* something was said.
 
-**Main risk for this app:** the model already knows modern medicine from its training data. Retrieval limited by year, plus instructions to answer only from the passages, is how I try to keep that knowledge out, and my evaluation checks whether it leaks anyway.
+**Main risks for this app:**
+- **Invented details about a person.** The model may fill gaps with believable but false statements about the client. Every answer must cite sessions, and my evaluation checks each claim against the transcript.
+- **Counting and "ever" questions.** RAG retrieves only a few top passages, so "how many times" and "never mentioned" questions can be wrong even when each retrieved passage is right. I test this directly.
+- **Privacy.** Real session data is protected health information. I use only fictional transcripts, and I document what a real deployment would require instead of claiming it.
 
 ## Comparing retrieval approaches
 
 | Approach | What it would do for my questions | Where it fails for my content | Cost / complexity |
 | --- | --- | --- | --- |
-| Keyword baseline (SQLite FTS5) | Finds exact terms like "black bile," "melancholy" or "Galen" | Misses paraphrases ("why am I always sad?"); early modern spelling ("physick," "humour") breaks exact matches | Lowest. Built into SQLite |
-| Vector (Chroma) | Finds passages by meaning, so a modern question can reach 1600s wording; year stored as metadata lets me filter to sources printed by the chosen year | Only knows what is *similar*, not how things connect; can return a passage that sounds related but doesn't answer the question | Low. pip install, local storage, free built-in embedding model |
-| Graph (e.g. Neo4j) | Follows chains in humoral theory: humor → qualities (hot/cold, wet/dry) → season → organ → temperament. Strong for "which season is worst for someone with too much black bile?" | Every relationship has to be extracted and checked against the texts; AI extraction can invent or modernize facts; a graph database is heavy for a small droplet | High. Extraction, checking, and running another database |
-| Both | Vector for passages, graph for relationship questions | More moving parts to build, debug and explain in 9 days | Highest |
+| Keyword baseline (SQLite FTS5) | Finds exact words like a medication name or "sister"; can **count** exact mentions across all sessions | Misses paraphrases: "trouble sleeping" won't match "up until 3 a.m." | Lowest. Built into SQLite |
+| Vector (Chroma) | Finds passages by meaning across sessions; session number and date stored as metadata so answers say when something was said | Returns only the top few matches, so it can't reliably count or prove something was *never* said; can return a passage that sounds related but isn't | Low. pip install, local storage, free built-in embedding model |
+| Graph (e.g. Neo4j) | Tracks people, topics and strategies across sessions: client → sister → conflict → session 4. Strong for "how has this relationship changed over time?" | Every relationship has to be extracted and checked; AI extraction can invent links between a real person and a feeling the client never stated, which is serious in a clinical record; heavy for a small droplet | High. Extraction, checking, another database |
+| Both | Vector for passages, graph for people and changes over time | More moving parts to build, debug and explain in 9 days | Highest |
 
 ## Architecture decision
 
-- **Choice:** vector retrieval (Chroma) with a publication-year filter. Graph researched and compared, not implemented at Build.
-- **Why it fits my questions:** most questions are everyday ones ("why do I get headaches?") that need meaning-based search across old wording. The year filter, not the graph, is what makes the app work, and vector metadata filters handle it directly. This keeps the project small enough to build and test well by Nov 24.
-- **What the keyword baseline can already do:** exact-term questions. I'll run the same five questions through keyword search and vector search and record where each one fails, especially paraphrases and old spellings.
-- **Expected benefit, and how I will check it:** vector search should retrieve the right passages for paraphrased questions where keyword search misses. Checked with the five evaluation questions, comparing retrieved source IDs to my expected sources.
-- **Smaller fallback if it does not work by Build:** keyword-only retrieval with the year filter, clearly labeled as the baseline, while I fix vector retrieval.
-- **Graph as a later experiment (optional, after Build):** a small hand-checked list of humoral relationships (about 30), each tied to its source passage, used to answer relationship questions. Only if time allows; labeled planned until built.
+- **Choice:** vector retrieval (Chroma) with session metadata, compared against a keyword baseline. Graph researched and compared, not implemented at Build.
+- **Why it fits my questions:** therapists mostly ask in their own words, which rarely match the client's words, so meaning-based search is the core need. Session number and date as metadata let every answer say when something came up. This is small enough to build and test well by Nov 24.
+- **What the keyword baseline can already do:** exact names and medications, and exact counts. I'll run the same questions through both and record where each fails.
+- **Expected benefit, and how I will check it:** vector search should find paraphrased mentions that keyword search misses. Keyword counting should beat RAG on "how many times" questions. Checked with my evaluation questions, comparing retrieved session IDs to the answers I planted in the transcripts.
+- **Smaller fallback if it does not work by Build:** keyword-only retrieval with session citations, clearly labeled as the baseline, while I fix vector retrieval.
+- **Graph as a later experiment (optional, after Build):** a hand-checked list of people and topics per session, used for "how has X changed over time?" questions. Only if time allows; labeled planned until built.
 
-**Design experiment (one bounded comparison):** chunking by paragraph vs. fixed length (about 500 characters). Same five questions, compare which retrieves the expected passages and where a split cuts an answer in half.
+**Design experiment (one bounded comparison):** chunking by speaker exchange (a therapist question plus the client's answer) vs. fixed length (about 500 characters). Same questions; compare which retrieves the planted passages and where a split separates a question from its answer.
 
 ## Source manifest
 
-Requirement: about five short permitted documents. Each needs a stable ID, origin, date/version and permission. Public availability does not automatically mean reuse is permitted, so I record why each one is public domain.
+Requirement: about five short permitted documents. Mine are **fictional session transcripts I write with AI assistance**, for one fictional client over six weekly sessions. No real people, no real clinical data.
 
-| ID | Title / author | Year written | Edition or translation used (year) | URL | Permission / why public domain | Portion used | Date checked |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| S01 | *The Castel of Helthe*, Sir Thomas Elyot | 1539 | EEBO-TCP transcription of the 1539 printing (Huntington Library copy) | https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/A21293 | Text from 1539; transcription released CC0 1.0 (public domain dedication) | Book 1: the four humours and "complexions" (planned) | 2026-11-15 |
-| S02 | *The Anatomy of Melancholy*, Robert Burton | 1621 | Project Gutenberg eBook #10800 (later edition; exact base edition to confirm) | https://www.gutenberg.org/ebooks/10800 | Public domain in the USA (Project Gutenberg) | Partition 1: causes and symptoms of melancholy (planned) | 2026-11-15 |
-| S03 | *An Anatomical Disquisition on the Motion of the Heart and Blood in Animals*, William Harvey | 1628 | Robert Willis English translation, Everyman's Library edition (1906); Project Gutenberg #67065 | https://www.gutenberg.org/ebooks/67065 | Public domain in the USA (Project Gutenberg) | Chapters on the circulation of the blood (planned) | 2026-11-15 |
-| S04 | *The Complete Herbal*, Nicholas Culpeper | 1653 | Project Gutenberg eBook #49513 (later reprint; exact edition to confirm) | https://www.gutenberg.org/ebooks/49513 | Public domain in the USA (Project Gutenberg) | Introduction and about 10 common herbs (planned) | 2026-11-15 |
-| S05 | *Certain Necessary Directions as well for the Cure of the Plague as for Preventing the Infection*, College of Physicians of London | 1665 | EEBO-TCP / EarlyPrint transcription (A31495) | https://distantreader.org/stacks/earlyprint/txt/A31495.txt | Text from 1665; EEBO-TCP transcriptions are public domain (CC0); confirm on the EEBO-TCP record | Full pamphlet (short) | 2026-11-15 |
+| ID | Document | Session date (fictional) | Origin | Permission | Planted content (ground truth for testing) | Status |
+| --- | --- | --- | --- | --- | --- | --- |
+| S01 | Session 1 transcript: intake | 2026-09-07 | Authored by me, synthetic | Mine; fictional, labeled synthetic | Reason for coming in; mentions sister for the first time; panic attack at work | planned |
+| S02 | Session 2 transcript | 2026-09-14 | Authored by me, synthetic | Mine | Sleep problems described without the word "sleep" ("up until 3 a.m."); first coping strategy: breathing exercise | planned |
+| S03 | Session 3 transcript | 2026-09-21 | Authored by me, synthetic | Mine | Mentions starting a medication prescribed by their doctor (by name); second panic attack | planned |
+| S04 | Session 4 transcript | 2026-09-28 | Authored by me, synthetic | Mine | Argument with sister; breathing exercise "didn't help this time" | planned |
+| S05 | Session 5 transcript | 2026-10-05 | Authored by me, synthetic | Mine | Sleep improving; tries journaling; third panic attack | planned |
+| S06 | Session 6 transcript | 2026-10-12 | Authored by me, synthetic | Mine | Reconciles with sister; client's own summary of what's helped | planned |
 
-**Why these five:** together they span 1539 to 1665, and Harvey's 1628 discovery that blood circulates falls in the middle, so changing the year visibly changes what the physician knows.
+**Why planted content:** because I write the transcripts, I know exactly where each fact appears. That gives me a ground truth to check retrieval and answers against, including exact counts (three panic attacks).
 
-**Known limits:**
-- The year filter uses the **first publication year**, but S02 to S04 are later editions or translations. Later editions may include additions, and Harvey's text is in 1840s English, not 1628 wording. I record this rather than hide it.
-- Early modern spelling in S01 and S05 ("helthe," "humours") will affect keyword search; that is part of my keyword vs. vector comparison.
+**Known limits:** fictional transcripts are cleaner and shorter than real sessions. Results here don't show how the app would do on real, messy recordings. Real use would require HIPAA compliance, client consent, a business associate agreement with any AI provider, encryption and access logging. That is out of scope and not claimed.
 
 ## Proposed flow (planned)
 
 ```text
-permitted source (S0x, year)
-  → import: stable ID, version hash, publication year as metadata
-  → clean: spelling variants? headings kept?
-  → represent: chunks + embeddings  and/or  entities + relationships with source passage
-  → store (database: ___ )
-  → user picks a year + asks a question
-  → retrieve ONLY from sources with year <= chosen year
-  → send retrieved passages to model (provider/model: ___ )
-  → answer in period voice + openable source references
-  → if evidence is missing: say the texts do not cover it
+transcript file (S0x, session #, date)
+  → import: stable ID, content hash, session number + date as metadata
+  → clean: keep speaker labels (Therapist / Client)
+  → chunk: by speaker exchange (or fixed length, for the experiment)
+  → embed (all-MiniLM-L6-v2) and store in Chroma
+  → therapist logs in and asks a question
+  → retrieve top 5 chunks (optionally filtered by session range)
+  → send retrieved passages to model (Groq, gpt-oss-20b)
+  → answer + links to each session and passage used
+  → if evidence is missing: "The transcripts don't mention this"
 ```
 
 ## One source traced end to end
@@ -103,51 +106,50 @@ _Planned sketch, not an executed test._
 
 | Step | What happens to one passage |
 | --- | --- |
-| Source passage (S0x, location) | S02 (Burton, 1621), a passage in Partition 1 on black bile as a cause of melancholy. Exact section to record once imported |
-| Chunk or graph representation | Paragraph chunk with ID `S02-C###`, metadata: source S02, year 1621, section, paragraph number; embedded with all-MiniLM-L6-v2 and stored in Chroma |
-| Question that should retrieve it | "Why do I feel sad all the time for no reason?" with the year set to 1640 |
-| Expected retrieved IDs | S02 chunks about melancholy and black bile; possibly S01 (Elyot on the melancholic complexion) |
-| Expected answer | A period explanation: an excess of black bile, with Burton's suggested remedies, plus links to the S02 passages used |
-| What a missing or wrong retrieval would look like | Retrieves Culpeper herbs unrelated to sadness; or the answer mentions modern ideas (serotonin, depression as a diagnosis) that no retrieved passage contains. That is the anachronism I check for |
+| Source passage (S0x, location) | S02, the exchange where the client says they were "up until 3 a.m. again" |
+| Chunk or graph representation | Speaker-exchange chunk `S02-C###`, metadata: session 2, date 2026-09-14, speakers; embedded and stored in Chroma |
+| Question that should retrieve it | "Has the client talked about trouble sleeping?" |
+| Expected retrieved IDs | S02 chunk above, and the S05 chunk where sleep improves |
+| Expected answer | "Yes. In session 2 the client described staying up until 3 a.m.; by session 5 they said sleep was improving," with links to both passages |
+| What a missing or wrong retrieval would look like | Keyword search finds nothing (no word "sleep"); or the answer adds a detail not in either passage, like a sleep medication |
 
 ## Evaluation questions
 
-Written before running anything. Expected sources are predictions.
+Written before running anything. Expected sessions come from the content I plant in the transcripts.
 
-| # | Type | Question | Year setting | Expected source IDs | Expected behavior | Status |
-| --- | --- | --- | --- | --- | --- | --- |
-| Q1 | Exact term | What is black bile? | 1630 | S01, S02 | Defines black bile as cold and dry, linked to melancholy, with citations | planned |
-| Q2 | Paraphrase | Why do I feel sad all the time for no reason? | 1640 | S02 (maybe S01) | Finds "melancholy" passages despite no shared words; keyword search expected to miss this | planned |
-| Q3 | Relationship | Which humour is linked to autumn, and what qualities does it have? | 1600 | S01 | Connects humour, season and qualities from one source; tests whether chunks keep those links together | planned |
-| Q4 | Ordinary useful (year switch) | What does the heart do? | 1600, then 1650 | 1600: S01 only. 1650: S03 | At 1600, no mention of blood circulating. At 1650, describes circulation from Harvey. The answers should differ | planned |
-| Q5 | Unanswerable | Should I get a vaccine to protect me from the plague? | 1665 | none | Says the texts do not cover vaccines; may describe the plague advice in S05 but must not invent vaccines or germs | planned |
+| # | Type | Question | Expected session IDs | Expected behavior | Status |
+| --- | --- | --- | --- | --- | --- |
+| Q1 | Exact term | Has the client mentioned [medication name]? | S03 | Yes, session 3, with the passage | planned |
+| Q2 | Paraphrase | Has the client talked about trouble sleeping? | S02, S05 | Finds "up until 3 a.m." with no shared words; keyword search expected to miss it | planned |
+| Q3 | Relationship over time | How has the client's relationship with their sister changed? | S01, S04, S06 | Describes first mention, the argument and the reconciliation, in order, with citations | planned |
+| Q4 | Ordinary useful | What coping strategies have we tried, and how did they go? | S02, S04, S05, S06 | Breathing exercise (helped, then didn't), journaling; each with its session | planned |
+| Q5 | Unanswerable | What is the client's diagnosis? | none | Says the transcripts don't state a diagnosis; does not suggest one | planned |
+| Q6 | Counting experiment | How many panic attacks has the client reported? | S01, S03, S05 (3) | Keyword count expected correct; RAG answer expected unreliable. Recorded as a finding, not hidden | planned |
 
 ## Stories and checks
 
 | # | Story (As a ___, I want ___, so ___) | Observable check | Status |
 | --- | --- | --- | --- |
-| 1 | As a curious reader, I want to pick a year before asking, so the answer reflects only what was known then | Q4 at 1600 retrieves no S03 chunks; at 1650 it does | planned |
-| 2 | As a curious reader, I want to see which passages an answer came from, so I can read the original text | Every answer shows source IDs that open the cited passage | planned |
-| 3 | As a curious reader, I want an honest reply when the old texts don't cover my question, so I'm not fooled by invented history | Q5 returns a "not covered by these texts" reply with no vaccines or germs | planned |
-| 4 | As the site owner, I want re-importing the same texts to change nothing, so the database stays clean | Importing twice keeps the same chunk count and IDs | planned |
-| 5 | As the site owner, I want only me to import or delete sources, so visitors can't change the library | A visitor's request to the import action is refused | planned |
-
-Checks to include somewhere: repeat import creates no duplicates; changing the year changes which sources can be retrieved; a missing-evidence question gets an honest "not covered"; a public visitor cannot use import/admin actions.
+| 1 | As a therapist, I want to ask about a client's history in my own words, so I don't have to reread every transcript | Q2 retrieves S02 and S05 even though "sleep" isn't in S02 | planned |
+| 2 | As a therapist, I want every answer linked to the session it came from, so I can verify it | Every answer shows session IDs that open the cited passage | planned |
+| 3 | As a therapist, I want an honest reply when the transcripts don't cover something, so I'm not misled about my client | Q5 returns "not stated in the transcripts" with no suggested diagnosis | planned |
+| 4 | As the account owner, I want re-uploading the same transcript to change nothing, so the record stays clean | Importing twice keeps the same chunk count and IDs | planned |
+| 5 | As the account owner, I want only logged-in therapists to see transcripts, so a visitor can't read client records | A logged-out request to ask or upload is refused | planned |
 
 ## Hosting, cost and limits
 
 - **Server:** existing DigitalOcean droplet (bmctiernan.com) with Docker, Traefik and HTTPS. Memory and disk: check before Build (planned)
-- **App base:** extend my App Studio FastAPI app with one new route for questions
-- **Database:** Chroma (vector) with data saved to a Docker volume so it survives restarts
+- **App base:** extend my App Studio FastAPI app; its login and member/admin roles become therapist accounts. A demo account with the synthetic client lets reviewers try it
+- **Database:** Chroma (vector) with data saved to a Docker volume so it survives restarts; SQLite FTS5 for the keyword baseline
 - **Embedding model:** Chroma's default all-MiniLM-L6-v2 (runs on the server, free, no API key)
-- **Generation model / provider:** Groq free tier (openai/gpt-oss-20b); Gemini free API as backup
-- **Cost cap and request limits:** free tiers only; max 5 retrieved chunks and about 500 output tokens per answer; per-visitor rate limit on the public demo; importing sources only through an admin command, never a public page
+- **Generation model / provider:** Groq free tier (openai/gpt-oss-20b); Gemini free API as backup. Acceptable only because the data is fictional
+- **Cost cap and request limits:** free tiers only; max 5 retrieved chunks and about 500 output tokens per answer; per-account rate limit
 - **Where keys live:** server environment only, never in Git or front-end code
-- **Safety:** clear "historical simulation, not medical advice" label; real health questions get a reply to see a modern doctor
+- **Out of scope (documented, not built):** live transcription, real patient data, HIPAA compliance, automatic session-note generation
 
 ## Open questions for the instructor
 
--
+- Is a corpus of six synthetic transcripts I write myself acceptable as "permitted content"?
 
 ## Help received
 
