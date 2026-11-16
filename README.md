@@ -30,7 +30,7 @@ IS373-001, Fall 2026. This is my evolving individual record for the two individu
 | Technical sources | [Sources](2-rag-technical.md#technical-research-sources) | done |
 | Vector vs graph vs keyword comparison | [Comparison](2-rag-technical.md#comparing-retrieval-approaches) | done |
 | Chosen architecture | [Decision](2-rag-technical.md#architecture-decision) | done |
-| Permitted source manifest | [Manifest](2-rag-technical.md#source-manifest) | done (planned checks not run) |
+| Permitted source manifest | [Manifest](2-rag-technical.md#source-manifest) · [transcripts](corpus/) | done; transcripts written |
 | Sample representation and trace | [Trace](2-rag-technical.md#one-source-traced-end-to-end) | done (planned checks not run) |
 | Five evaluation questions | [Questions](2-rag-technical.md#evaluation-questions) | done (planned checks not run) |
 | Stories and checks | [Stories](2-rag-technical.md#stories-and-checks) | done (planned checks not run) |

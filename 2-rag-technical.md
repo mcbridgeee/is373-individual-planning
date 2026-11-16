@@ -52,7 +52,7 @@ I first planned a "physician from another year" app using public-domain medical 
 
 | Approach | What it would do for my questions | Where it fails for my content | Cost / complexity |
 | --- | --- | --- | --- |
-| Keyword baseline (SQLite FTS5) | Finds exact words like a medication name or "sister"; can **count** exact mentions across all sessions | Misses paraphrases: "trouble sleeping" won't match "up until 3 a.m." | Lowest. Built into SQLite |
+| Keyword baseline (SQLite FTS5) | Finds exact words like "sertraline" or "Ashley"; can count exact *mentions* across all sessions (but a mention is not an event: see Q6) | Misses paraphrases: "trouble sleeping" won't match "up until 3 a.m." | Lowest. Built into SQLite |
 | Vector (Chroma) | Finds passages by meaning across sessions; session number and date stored as metadata so answers say when something was said | Returns only the top few matches, so it can't reliably count or prove something was *never* said; can return a passage that sounds related but isn't | Low. pip install, local storage, free built-in embedding model |
 | Graph (e.g. Neo4j) | Tracks people, topics and strategies across sessions: client → sister → conflict → session 4. Strong for "how has this relationship changed over time?" | Every relationship has to be extracted and checked; AI extraction can invent links between a real person and a feeling the client never stated, which is serious in a clinical record; heavy for a small droplet | High. Extraction, checking, another database |
 | Both | Vector for passages, graph for people and changes over time | More moving parts to build, debug and explain in 9 days | Highest |
@@ -61,8 +61,8 @@ I first planned a "physician from another year" app using public-domain medical 
 
 - **Choice:** vector retrieval (Chroma) with session metadata, compared against a keyword baseline. Graph researched and compared, not implemented at Build.
 - **Why it fits my questions:** therapists mostly ask in their own words, which rarely match the client's words, so meaning-based search is the core need. Session number and date as metadata let every answer say when something came up. This is small enough to build and test well by Nov 24.
-- **What the keyword baseline can already do:** exact names and medications, and exact counts. I'll run the same questions through both and record where each fails.
-- **Expected benefit, and how I will check it:** vector search should find paraphrased mentions that keyword search misses. Keyword counting should beat RAG on "how many times" questions. Checked with my evaluation questions, comparing retrieved session IDs to the answers I planted in the transcripts.
+- **What the keyword baseline can already do:** exact names and medications. I'll run the same questions through both and record where each fails.
+- **Expected benefit, and how I will check it:** vector search should find paraphrased mentions that keyword search misses. Neither should be trusted on "how many" questions: Q6 tests this. Checked with my evaluation questions, comparing retrieved session IDs to the answers I planted in the transcripts.
 - **Smaller fallback if it does not work by Build:** keyword-only retrieval with session citations, clearly labeled as the baseline, while I fix vector retrieval.
 - **Graph as a later experiment (optional, after Build):** a hand-checked list of people and topics per session, used for "how has X changed over time?" questions. Only if time allows; labeled planned until built.
 
@@ -70,16 +70,16 @@ I first planned a "physician from another year" app using public-domain medical 
 
 ## Source manifest
 
-Requirement: about five short permitted documents. Mine are **fictional session transcripts I write with AI assistance**, for one fictional client over six weekly sessions. No real people, no real clinical data.
+Requirement: about five short permitted documents. Mine are **fictional session transcripts I write with AI assistance**, for one fictional client (Jenny Alvarez) and therapist (Dr. Aris Thorne) over six weekly sessions. No real people, no real clinical data. Files: [corpus/](corpus/).
 
 | ID | Document | Session date (fictional) | Origin | Permission | Planted content (ground truth for testing) | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| S01 | Session 1 transcript: intake | 2026-09-07 | Authored by me, synthetic | Mine; fictional, labeled synthetic | Reason for coming in; mentions sister for the first time; panic attack at work | planned |
-| S02 | Session 2 transcript | 2026-09-14 | Authored by me, synthetic | Mine | Sleep problems described without the word "sleep" ("up until 3 a.m."); first coping strategy: breathing exercise | planned |
-| S03 | Session 3 transcript | 2026-09-21 | Authored by me, synthetic | Mine | Mentions starting a medication prescribed by their doctor (by name); second panic attack | planned |
-| S04 | Session 4 transcript | 2026-09-28 | Authored by me, synthetic | Mine | Argument with sister; breathing exercise "didn't help this time" | planned |
-| S05 | Session 5 transcript | 2026-10-05 | Authored by me, synthetic | Mine | Sleep improving; tries journaling; third panic attack | planned |
-| S06 | Session 6 transcript | 2026-10-12 | Authored by me, synthetic | Mine | Reconciles with sister; client's own summary of what's helped | planned |
+| S01 | Session 1 transcript: intake | 2026-09-07 | Authored by me, synthetic | Mine; fictional, labeled synthetic | Reason for coming in; first mention of sister Ashley; first panic attack, at work | written |
+| S02 | Session 2 transcript | 2026-09-14 | Authored by me, synthetic | Mine | Sleep problems described without the word "sleep" ("up until 3 a.m."); first coping strategy: breathing exercise | written |
+| S03 | Session 3 transcript | 2026-09-21 | Authored by me, synthetic | Mine | Starts sertraline prescribed by Dr. Patel; second panic attack (on the highway) | written |
+| S04 | Session 4 transcript | 2026-09-28 | Authored by me, synthetic | Mine | Argument with sister; breathing exercise "didn't help this time" | written |
+| S05 | Session 5 transcript | 2026-10-05 | Authored by me, synthetic | Mine | Sleep improving; tries journaling; third panic attack | written |
+| S06 | Session 6 transcript | 2026-10-12 | Authored by me, synthetic | Mine | Reconciles with sister; client's own summary of what's helped | written |
 
 **Why planted content:** because I write the transcripts, I know exactly where each fact appears. That gives me a ground truth to check retrieval and answers against, including exact counts (three panic attacks).
 
@@ -119,12 +119,12 @@ Written before running anything. Expected sessions come from the content I plant
 
 | # | Type | Question | Expected session IDs | Expected behavior | Status |
 | --- | --- | --- | --- | --- | --- |
-| Q1 | Exact term | Has the client mentioned [medication name]? | S03 | Yes, session 3, with the passage | planned |
-| Q2 | Paraphrase | Has the client talked about trouble sleeping? | S02, S05 | Finds "up until 3 a.m." with no shared words; keyword search expected to miss it | planned |
-| Q3 | Relationship over time | How has the client's relationship with their sister changed? | S01, S04, S06 | Describes first mention, the argument and the reconciliation, in order, with citations | planned |
-| Q4 | Ordinary useful | What coping strategies have we tried, and how did they go? | S02, S04, S05, S06 | Breathing exercise (helped, then didn't), journaling; each with its session | planned |
-| Q5 | Unanswerable | What is the client's diagnosis? | none | Says the transcripts don't state a diagnosis; does not suggest one | planned |
-| Q6 | Counting experiment | How many panic attacks has the client reported? | S01, S03, S05 (3) | Keyword count expected correct; RAG answer expected unreliable. Recorded as a finding, not hidden | planned |
+| Q1 | Exact term | Has the client mentioned sertraline? | S03 (first), S04, S05, S06 | Yes: started in session 3 (25 mg, prescribed by Dr. Patel), side effects cleared by session 4, credited with improved sleep in sessions 5 and 6 | planned |
+| Q2 | Paraphrase | Has the client talked about trouble sleeping? | S02, S05 (also S04, S06) | Must find S02 ("up until 3 a.m."), which never uses the word "sleep." Checked: a keyword search for "sleep" matches S04, S05, S06 but **not S02** | planned |
+| Q3 | Relationship over time | How has the client's relationship with their sister changed? | S01, S04, S05, S06 | In order: close but holding back (S01), argument (S04), dog-photo peace offering and journaling about it (S05), reconciled over coffee (S06) | planned |
+| Q4 | Ordinary useful | What coping strategies have we tried, and how did they go? | S02, S03, S04, S05, S06 | 4-4-6 breathing (helped a little, didn't help after the argument, helps when used early); journaling (helped her let go and sleep); medication (lowered baseline) | planned |
+| Q5 | Unanswerable | What is the client's diagnosis? | none | Says no diagnosis is recorded. Checked: no transcript contains "diagnosis" or "disorder." Must not suggest one (e.g. "panic disorder") | planned |
+| Q6 | Counting experiment | How many panic attacks has the client reported? | S01, S03, S05 (correct answer: 3) | Checked: the phrase "panic attack" appears **11 times across 5 sessions**, including "zero panic attacks" in S06. So a keyword count of mentions is wrong, and RAG may also miscount. Recorded as a finding | planned |
 
 ## Stories and checks
 
