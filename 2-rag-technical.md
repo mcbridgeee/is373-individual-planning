@@ -39,7 +39,7 @@ I first planned a "physician from another year" app using public-domain medical 
 
 - **RAG:** When a user asks something, the app first searches my permitted sources for the most relevant passages, then gives only those passages to the model to answer from. This keeps answers grounded in real evidence and reduces hallucination, though it doesn't eliminate it, so I test for it.
 - **Chunking:** Splitting each document into smaller passages before storing them. The app retrieves only the few chunks that match a question instead of a whole transcript. Too big brings in irrelevant text; too small loses context (for example, a client's answer separated from the therapist's question).
-- **Embeddings / vector search:** An embedding turns a passage into a list of numbers that places it in a "vector space," where similar meanings sit close together (the classic example: king − man + woman ≈ queen). Vector search finds the passages closest to the question's meaning, so "trouble sleeping" can find a passage where the client says "I was up until 3 a.m. again."
+- **Embeddings / vector search:** An embedding turns a passage into a list of numbers that places it in a "vector space," where similar meanings sit close together (the classic example: king − man + woman ≈ queen). Vector search finds the passages closest to the question's meaning, so "trouble sleeping" can find a passage where the client says "Most nights this week I was wide awake, up until 3 a.m. just staring at the ceiling or scrolling on my phone."
 - **Graph (entities and typed relationships):** A knowledge graph stores things as points (like the client, their sister, a coping strategy) connected by labeled arrows that state facts ("client *argued with* sister," "client *tried* breathing exercises"), each tied to the passage that says it. It's good for questions that follow a chain of relationships, which vector search can't do because it only knows what's *similar*, not how things connect.
 - **Content import (manifest, dedupe, stable IDs):** Bringing each transcript into the system with a stable ID, session number, date and permission, without creating duplicates when I import it again. The session number and date are what let the app say *when* something was said.
 
@@ -106,7 +106,7 @@ _Planned sketch, not an executed test._
 
 | Step | What happens to one passage |
 | --- | --- |
-| Source passage (S0x, location) | S02, the exchange where the client says they were "up until 3 a.m. again" |
+| --- | --- |
 | Chunk or graph representation | Speaker-exchange chunk `S02-C###`, metadata: session 2, date 2026-09-14, speakers; embedded and stored in Chroma |
 | Question that should retrieve it | "Has the client talked about trouble sleeping?" |
 | Expected retrieved IDs | S02 chunk above, and the S05 chunk where sleep improves |
