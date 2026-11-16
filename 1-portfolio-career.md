@@ -20,10 +20,6 @@ Requirement: three original employer postings, at least two role families, FDE i
 | P2 | ServiceNow, UX Research Internships | UX research on AI products | Internship (Master's) | Reference; not eligible now |
 | P3 | Duolingo, Senior Product Manager, Learning | Product management | Senior, full-time | Long-term reference |
 
-_AI use: factual fields and the responsibility summaries were drafted with AI (Claude) from the original postings on 2026-11-15. I check each against the original page before relying on it. "Something I have actually done," the gap and the next action are my own._
-
-**Verified by me:** P1 ☐ · P2 ☐ · P3 ☐
-
 ### Posting 1: FDE reference
 
 | Field | Record |
@@ -41,9 +37,9 @@ _AI use: factual fields and the responsibility summaries were drafted with AI (C
 | Required qualifications | Python (or similar) development; taking production AI solutions from concept to launch; designing AI systems on cloud platforms (e.g. GCP); building data pipelines with vector databases and RAG-like architectures |
 | Preferred qualifications | Multi-agent frameworks (LangGraph, CrewAI, ADK); leading technical discovery sessions; LLM metrics (tokens/sec, cost per request); tracing and state management |
 | Short excerpt supporting my reading (section name) | Responsibilities: "Create evaluation pipelines and observability tools" for accuracy, safety and latency; the role is an "embedded builder" alongside customer engineering teams. |
-| Something I have actually done | |
-| One gap | |
-| Next action and date | |
+| Something I have actually done | Deployed apps on my own DigitalOcean server with Docker, Traefik, HTTPS and CI/CD; built a FastAPI app with login and member/admin roles (IS373 Studios); built an AI chat tool during my Fiserv internship |
+| One gap | No production AI system yet; no RAG or vector-database pipeline |
+| Next action and date | Build and evaluate my IS373 RAG app; working hosted version by 2026-11-24 |
 | Uncertainty / not stated | Whether HCI counts as "a related technical field"; travel; posting date. Pay listed as $98K–$131K (annualized) |
 
 ### Posting 2: UX research on AI products
@@ -63,9 +59,9 @@ _AI use: factual fields and the responsibility summaries were drafted with AI (C
 | Required qualifications | Not split into required vs preferred. Clearly mandatory: full-time for 12 weeks; portfolio at interview stage. Listed: experience using or critically evaluating AI in work or coursework; writing and running surveys and qualitative research; usability evaluation, task analysis, experimental design |
 | Preferred qualifications | Not labeled. Also listed: customer-facing experience; learning technical concepts quickly |
 | Short excerpt supporting my reading (section name) | Team: "Our team uses AI across the research lifecycle, from planning and synthesis to reporting." |
-| Something I have actually done | |
-| One gap | |
-| Next action and date | |
+| Something I have actually done | UX research internship at Fiserv; Dinner Diaries diary study. Strong in qualitative research |
+| One gap | Requires a Master's degree |
+| Next action and date | Finish my portfolio site and update it with my most recent work by 2027-01-01 |
 | Uncertainty / not stated | Required vs preferred not labeled; exact deadline; which team/location I'd join |
 
 ### Posting 3: Product management
