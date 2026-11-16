@@ -81,30 +81,30 @@ Requirement: three original employer postings, at least two role families, FDE i
 | Required qualifications | Not split. "You have": PM experience with outstanding results; using user insights, data and statistics for decisions; "top-tier design sense"; resourceful, curious, innovative; desire to improve the world through education tech |
 | Preferred qualifications | None listed separately |
 | Short excerpt supporting my reading (section name) | You will: "Perform qualitative and quantitative research to explore and validate feature ideas." |
-| Something I have actually done | |
-| One gap | |
-| Next action and date | |
+| Something I have actually done | Dinner Diaries diary study used to shape design decisions; planned and coordinated group projects, assigning tasks and keeping the team on schedule |
+| One gap | Senior role that requires prior product management experience (no degree requirement listed). No junior PM role open at Duolingo for my level right now; the only PM internship listed is for MBA students |
+| Next action and date | Check Duolingo and similar edtech companies for associate or junior PM roles that fit my graduation date by 2027-01-01 |
 | Uncertainty / not stated | No direct AI mention in the posting text; work arrangement; deadline |
 
 ## Comparing two directions
 
-| Question | Direction A: | Direction B: |
+| Question | Direction A: UX research on AI products (P2, with P1 as technical context) | Direction B: Product management (P3) |
 | --- | --- | --- |
-| What would I do regularly? (from the postings) | | |
-| What attracts me or feels unsuitable? | | |
-| What can I demonstrate today? (real links) | | |
-| Which gap can this course help with? | | |
-| Next step and date | | |
+| What would I do regularly? (from the postings) | Plan, run and synthesize studies from discovery to validation; turn findings into personas, journey maps and task analyses; evaluate AI-enabled tools and workflows | Own a product area end to end; prioritize features and run experiments; set strategy and align engineering, design and leadership |
+| What attracts me or feels unsuitable? | Being an individual contributor who conducts research directly, understands users, and shapes what gets built and why. Solving new problems and influencing how a product develops | Research informs decisions but is not the main daily work; the focus is prioritization and business tradeoffs across many teams. Early in my career I want to build hands-on research depth first |
+| What can I demonstrate today? (real links) | Fiserv UX research internship; Dinner Diaries diary study; strong qualitative research | Coordinating group projects: assigning tasks and keeping teams on schedule; research-informed design decisions |
+| Which gap can this course help with? | Evaluating AI systems: my RAG app's evaluation (expected evidence, citation support, missing-evidence answers) is a research study of an AI tool | Running and analyzing experiments; defining requirements and scope for a shipped feature |
+| Next step and date | Finish and update my portfolio with my most recent research by 2027-01-01 | Look for associate PM roles that fit my graduation date by 2027-01-01 |
 
-**Provisional choice and why:**
+**Provisional choice and why:** UX research on AI products. It matches the work I want to do every day as an individual contributor: running research, understanding users, and shaping product decisions with evidence. Product management uses many of the same skills, and my project coordination experience transfers, but its center is prioritization and strategy rather than research. I'll keep PM as a possible later direction.
 
 (The full private reflection, about 150 to 250 words, stays in Canvas, not in this public repo.)
 
 ## Target role and reader
 
-- **Target role (provisional):**
-- **Primary reader:**
-- **After visiting my site, this reader should understand / do:**
+- **Target role (provisional):** UX researcher on AI products (internship or junior)
+- **Primary reader:** a UX research hiring manager or recruiter on a team building AI products
+- **After visiting my site, this reader should understand / do:** that I run rigorous qualitative research and can also evaluate an AI system's answers against evidence, then open one case study and contact me
 
 ## Responsibility-to-evidence map
 
