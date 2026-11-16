@@ -89,8 +89,9 @@ Requirement: about five short permitted documents. Mine are **fictional session 
 
 ```text
 transcript file (S0x, session #, date)
-  → import: stable ID, content hash, session number + date as metadata
-  → clean: keep speaker labels (Therapist / Client)
+  → import: parse frontmatter into metadata (id, session_date), compute content hash
+  → strip: index transcript body only, never planted_content
+  → clean: keep timestamps and speaker labels (Dr. Thorne / Jenny)
   → chunk: by speaker exchange (or fixed length, for the experiment)
   → embed (all-MiniLM-L6-v2) and store in Chroma
   → therapist logs in and asks a question
@@ -106,7 +107,7 @@ _Planned sketch, not an executed test._
 
 | Step | What happens to one passage |
 | --- | --- |
-| --- | --- |
+| Source passage (S0x, location) | S02 [00:01:07], the exchange where the client says "Most nights this week I was wide awake, up until 3 a.m. just staring at the ceiling or scrolling on my phone" |
 | Chunk or graph representation | Speaker-exchange chunk `S02-C###`, metadata: session 2, date 2026-09-14, speakers; embedded and stored in Chroma |
 | Question that should retrieve it | "Has the client talked about trouble sleeping?" |
 | Expected retrieved IDs | S02 chunk above, and the S05 chunk where sleep improves |
