@@ -20,7 +20,7 @@ IS373-001, Fall 2026. This is my evolving individual record for the two individu
 | Target role and reader | [Reader](1-portfolio-career.md#target-role-and-reader) | done (provisional) |
 | Responsibility-to-evidence map | [Evidence map](1-portfolio-career.md#responsibility-to-evidence-map) | done |
 | Portfolio page outline | [Outline](1-portfolio-career.md#portfolio-page-outline) | done |
-| Two layouts and decision | [Layouts](1-portfolio-career.md#two-lightweight-layouts) | wireframes done; choice pending |
+| Two layouts and decision | [Layouts](1-portfolio-career.md#two-lightweight-layouts) | done: Layout B (provisional) |
 
 ### 2. RAG app + technical research
 

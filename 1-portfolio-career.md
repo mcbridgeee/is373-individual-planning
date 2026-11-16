@@ -138,7 +138,7 @@ Same content, two treatments. Wireframes only; I do not build two sites.
 | Strength | A busy reviewer reaches work in one click; every project gets equal weight | Explains my non-traditional path and research process; puts the RAG app in front |
 | Weakness | Less personality; my story is pushed down to a short About | Case studies sit lower, so a skimming reviewer may leave before seeing work |
 
-**Choice and reason:**
+**Choice and reason:** Layout B (story-first), provisional; I'll revisit it after peer feedback at Build. My reader is a UX research hiring manager. In a field where so much is now AI-generated, I want to come across as a real, personable human: who I am, what I care about, how I work, and why I chose this path. B leads with that, then puts my most recent and best work (the RAG case study) front and center. **Trade-off I'm accepting:** case studies sit lower than in Layout A, so a fast skimmer might leave before seeing work. **Check:** at the peer test, see whether a reviewer reaches a case study without help; if not, move the featured project higher.
 
 ## Planned checks
 
