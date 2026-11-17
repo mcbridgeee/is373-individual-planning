@@ -43,9 +43,12 @@ Each section follows: source → observation → assumption → alternatives →
 
 ## Peer feedback log
 
+Full feedback lives in this repository's [issues](https://github.com/mcbridgeee/is373-individual-planning/issues); this table summarizes it.
+
 | Date | Peer | What they tried | What they said / did | My decision | Change link |
 | --- | --- | --- | --- | --- | --- |
-| | | | | | |
+| Nov 17 | Dhruvi ([#1](https://github.com/mcbridgeee/is373-individual-planning/issues/1)) | Reviewed the portfolio plan and the featured RAG case study | The evidence map connects the UX research postings to work I can show, and the RAG evaluation is concrete evidence of assessing an AI product. Suggested one sentence under the featured RAG project's title saying what I evaluated, so a hiring manager sees its relevance before opening the case study | Pending | |
+| Nov 17 | Ann ([#2](https://github.com/mcbridgeee/is373-individual-planning/issues/2)) | Traced the "trouble sleeping" example from source to answer, then compared the top-5 retrieval setting with the evaluation questions | Planted facts and expected sessions written in advance make the checks easy to follow. Asked whether top 5 chunks can even cover Q1 (4 sessions), Q4 (5) and Q3 (up to 6), and how I'll tell a retrieval failure from a limit failure; suggested testing a larger top-k | Pending | |
 
 ## Review history
 
