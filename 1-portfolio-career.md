@@ -122,9 +122,9 @@ Required content: accurate introduction, individual RAG case study with a link t
 **Planned URL:** portfolio.bmctiernan.com on my existing DigitalOcean server (planned; not built yet).
 
 1. **Home:** one-line direction (UX researcher on AI products), short intro, links to case studies and contact.
-2. **RAG app case study:** problem and reader, research and architecture choice, evaluation results, what I changed after peer testing, link to the working app and code.
+2. **RAG app case study:** problem and reader, research and architecture choice, evaluation results, what I changed after peer testing, link to the working app and code. Under the title, one line saying what I evaluated and what I found, written only after the checks run (placeholder: "I tested whether the app's answers were supported by the sessions they cited: [result]"). From Dhruvi's feedback ([#1](https://github.com/mcbridgeee/is373-individual-planning/issues/1)).
 3. **Group system case study:** the problem, our workflow, and my named contribution with links.
-4. **Research case studies:** Dinner Diaries diary study; Fiserv UX research internship (only what I'm allowed to share).
+4. **Research case studies:** Dinner Diaries diary study; Fiserv UX research internship (only what I'm allowed to share). Each gets the same one-line "what I tested and what I found" under its title, so a skimming hiring manager sees the research before opening it.
 5. **About, resume, GitHub, LinkedIn and email.**
 
 ## Two lightweight layouts
