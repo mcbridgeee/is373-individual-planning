@@ -32,9 +32,10 @@ IS373-001, Fall 2026. This is my evolving individual record for the two individu
 | Chosen architecture | [Decision](2-rag-technical.md#architecture-decision) | done |
 | Permitted source manifest | [Manifest](2-rag-technical.md#source-manifest) · [transcripts](corpus/) | done; transcripts written |
 | Sample representation and trace | [Trace](2-rag-technical.md#one-source-traced-end-to-end) | done (planned checks not run) |
-| Five evaluation questions | [Questions](2-rag-technical.md#evaluation-questions) | done (planned checks not run) |
-| Stories and checks | [Stories](2-rag-technical.md#stories-and-checks) | done (planned checks not run) |
-| Hosting, cost and resource limits | [Hosting](2-rag-technical.md#hosting-cost-and-limits) | done |
+| Five evaluation questions | [Questions](2-rag-technical.md#evaluation-questions) | done; retrieval [observed hosted](2-rag-technical.md#first-retrieval-run-observed-hosted-nov-16), answers planned |
+| Stories and checks | [Stories](2-rag-technical.md#stories-and-checks) | done; stories 4 and 5 observed in CI, others planned |
+| Hosting, cost and resource limits | [Hosting](2-rag-technical.md#hosting-cost-and-limits) | done; memory checked and server resized |
+| Early hosted app (optional at Plan) | [rag.bmctiernan.com](https://rag.bmctiernan.com) · [repository](https://github.com/mcbridgeee/is373-rag-app) | observed hosted; answer generation not yet running |
 
 ## Decision trail
 

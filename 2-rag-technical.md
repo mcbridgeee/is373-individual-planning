@@ -4,11 +4,13 @@
 
 [Back to index](README.md)
 
+**Links:** [live app](https://rag.bmctiernan.com) (login required; demo account on request) · [app repository](https://github.com/mcbridgeee/is373-rag-app) · [CI runs](https://github.com/mcbridgeee/is373-rag-app/actions) · [transcripts](corpus/)
+
 ## Changed / checked / next
 
 - **Changed (Plan, Nov 16):** switched concept from a historical-medicine app to a therapist session-notes assistant (see decision trail); researched RAG, chunking, embeddings, vector and graph retrieval; chose vector retrieval (Chroma) with session metadata and a keyword baseline; wrote six synthetic session transcripts, then rewrote them as timestamped transcript exports (no stage directions, quieter therapist, filler speech and off-topic tangents) with the planted facts unchanged; wrote six evaluation questions with expected sessions.
-- **Checked:** ran keyword searches over the six transcripts to confirm the planted facts. Confirmed session 2 never uses the word "sleep" (so keyword search misses it for Q2), no transcript contains "diagnosis" or "disorder" (Q5), and "panic attack" appears 8 times across 5 sessions while the true count is 3 (Q6). Rechecked all of these after the Nov 16 rewrite; Ashley now also comes up in passing in S02 and S03. No app or retrieval tests have run yet; all other checks are planned.
-- **Next:** by Build (Nov 24), host a small working version on my server: import the six transcripts, retrieve with Chroma, answer with Groq and show session citations. Then run Q1 to Q6 against both keyword and vector retrieval.
+- **Checked:** ran keyword searches over the six transcripts to confirm the planted facts. Confirmed session 2 never uses the word "sleep" (so keyword search misses it for Q2), no transcript contains "diagnosis" or "disorder" (Q5), and "panic attack" appears 8 times across 5 sessions while the true count is 3 (Q6). Rechecked all of these after the Nov 16 rewrite; Ashley now also comes up in passing in S02 and S03. After that, on Nov 16, I deployed a first version early and ran the retrieval half of my evaluation on the hosted app (results under [First retrieval run](#first-retrieval-run-observed-hosted-nov-16)). The app's 76 automated tests pass in CI. Answer generation has not run yet, so stories 2 and 3 and the Q5 answer are still planned.
+- **Next:** by Build (Nov 24), add the Groq key on the server and run Q1 to Q6 with generated answers, including the Q5 unanswerable case; record the exact model and library versions; try retrieving more than 5 passages for Q4; decide whether to add an admin-only upload page (story 4 currently imports from a server folder).
 
 ## Reader and question
 
@@ -116,7 +118,7 @@ _Planned sketch, not an executed test._
 
 ## Evaluation questions
 
-Written before running anything. Expected sessions come from the content I plant in the transcripts.
+Written before running anything. Expected sessions come from the content I plant in the transcripts. The Status column below was written at Plan; the first actual retrieval results follow the table.
 
 | # | Type | Question | Expected session IDs | Expected behavior | Status |
 | --- | --- | --- | --- | --- | --- |
@@ -127,24 +129,44 @@ Written before running anything. Expected sessions come from the content I plant
 | Q5 | Unanswerable | What is the client's diagnosis? | none | Says no diagnosis is recorded. Checked: no transcript contains "diagnosis" or "disorder." Must not suggest one (e.g. "panic disorder") | planned |
 | Q6 | Counting experiment | How many panic attacks has the client reported? | S01, S03, S05 (correct answer: 3) | Checked: the phrase "panic attack" appears **8 times across 5 sessions**, including "almost two weeks without a panic attack" in S06. So a keyword count of mentions is wrong, and RAG may also miscount. Recorded as a finding | planned |
 
+### First retrieval run (observed hosted, Nov 16)
+
+I ran `scripts/evaluate.py` inside the hosted container, so it used the real embedding model (all-MiniLM-L6-v2). It retrieves the top 5 passages per question and checks whether every expected session came back. No answers were generated in this run.
+
+| # | Keyword baseline | Vector, exchange chunks | Vector, fixed 500-character chunks |
+| --- | --- | --- | --- |
+| Q1 sertraline | missing S05 | missing S05 | all found |
+| Q2 trouble sleeping | missing S02 | all found | all found |
+| Q3 sister | missing S06 | missing S05 | all found |
+| Q4 coping strategies | missing S02, S06 | missing S02, S04, S05 | missing S02, S04, S06 |
+| Q5 diagnosis | nothing returned (correct) | returns passages anyway | returns passages anyway |
+| Q6 panic attacks | missing S01 | all found | missing S01 |
+
+What this shows so far:
+
+- **Q2 behaved as predicted:** the keyword baseline missed S02 ("up until 3 a.m."), and vector search found it.
+- **Fixed chunks beat exchange chunks on Q1 and Q3,** which goes against my assumption that speaker exchanges would retrieve better. This becomes my chunking experiment for Build.
+- **Q4 fails everywhere** because it expects 5 sessions but only 5 passages come back, so one off-topic hit is enough to miss a session. Retrieving more passages is the next check.
+- **Q5 is not proven:** vector search always returns its closest passages, even for a question nothing answers, so an honest "not mentioned" reply depends on the answer step, which has not run yet.
+
 ## Stories and checks
 
 | # | Story (As a ___, I want ___, so ___) | Observable check | Status |
 | --- | --- | --- | --- |
-| 1 | As a therapist, I want to ask about a client's history in my own words, so I don't have to reread every transcript | Q2 retrieves S02 and S05 even though "sleep" isn't in S02 | planned |
+| 1 | As a therapist, I want to ask about a client's history in my own words, so I don't have to reread every transcript | Q2 retrieves S02 and S05 even though "sleep" isn't in S02 | retrieval observed hosted; answer planned |
 | 2 | As a therapist, I want every answer linked to the session it came from, so I can verify it | Every answer shows session IDs that open the cited passage | planned |
 | 3 | As a therapist, I want an honest reply when the transcripts don't cover something, so I'm not misled about my client | Q5 returns "not stated in the transcripts" with no suggested diagnosis | planned |
-| 4 | As the account owner, I want re-uploading the same transcript to change nothing, so the record stays clean | Importing twice keeps the same chunk count and IDs | planned |
-| 5 | As the account owner, I want only logged-in therapists to see transcripts, so a visitor can't read client records | A logged-out request to ask or upload is refused | planned |
+| 4 | As the account owner, I want re-uploading the same transcript to change nothing, so the record stays clean | Importing twice keeps the same chunk count and IDs | observed in CI (automated test; import is from a server folder, no upload page yet) |
+| 5 | As the account owner, I want only logged-in therapists to see transcripts, so a visitor can't read client records | A logged-out request to ask or upload is refused | observed in CI (automated test) |
 
 ## Hosting, cost and limits
 
-- **Server:** existing DigitalOcean droplet (bmctiernan.com) with Docker, Traefik and HTTPS. Memory and disk: check before Build (planned)
+- **Server:** existing DigitalOcean droplet (bmctiernan.com) with Docker, Traefik and HTTPS. Checked Nov 16: the 1 GB plan had about 260 MB free with no swap, too little for the embedding model, so I resized to the 2 GB plan ($12/month instead of $6) and kept the 25 GB disk so it can scale back down. About 1.3 GB was free after the resize. The app runs at rag.bmctiernan.com (observed hosted)
 - **App base:** extend my App Studio FastAPI app; its login and member/admin roles become therapist accounts. A demo account with the synthetic client lets reviewers try it
 - **Database:** Chroma (vector) with data saved to a Docker volume so it survives restarts; SQLite FTS5 for the keyword baseline
 - **Embedding model:** Chroma's default all-MiniLM-L6-v2 (runs on the server, free, no API key)
 - **Generation model / provider:** Groq free tier (openai/gpt-oss-20b); Gemini free API as backup. Acceptable only because the data is fictional
-- **Cost cap and request limits:** free tiers only; max 5 retrieved chunks and about 500 output tokens per answer; per-account rate limit
+- **Cost cap and request limits:** free model tiers only; max 5 retrieved chunks and about 500 output tokens per answer; Traefik limits requests per IP address (10 per second, bursts of 30), not per account as I first planned; public signup is turned off
 - **Where keys live:** server environment only, never in Git or front-end code
 - **Out of scope (documented, not built):** live transcription, real patient data, HIPAA compliance, automatic session-note generation
 
@@ -154,5 +176,5 @@ Written before running anything. Expected sessions come from the content I plant
 
 ## Help received
 
-- AI: Claude helped me compare retrieval approaches, research tools and costs, structure this record and check my transcripts against the evaluation questions. I wrote and edited the transcripts with AI assistance and chose the concept and architecture.
+- AI: Claude helped me compare retrieval approaches, research tools and costs, structure this record and check my transcripts against the evaluation questions. Gemini rewrote my first transcript drafts into a timestamped transcript-export format from a prompt with rules I set (planted facts unchanged), and Claude checked each rewrite against those rules. Claude also wrote most of the app code, tests and deployment setup from this plan, built from my App Studio account system, and ran the first deploy and retrieval check with me. I chose the concept, reader, architecture, corpus content and evaluation questions, and I reviewed the results recorded here.
 - People: none yet. A peer trace of one source through the plan is planned for the Nov 17/19 workshop.
