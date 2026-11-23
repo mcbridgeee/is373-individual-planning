@@ -21,6 +21,9 @@ IS373-001, Fall 2026. This is my evolving individual record for the two individu
 | Responsibility-to-evidence map | [Evidence map](1-portfolio-career.md#responsibility-to-evidence-map) | done |
 | Portfolio page outline | [Outline](1-portfolio-career.md#portfolio-page-outline) | done |
 | Two layouts and decision | [Layouts](1-portfolio-career.md#two-lightweight-layouts) | done: Layout B (provisional) |
+| Hosted portfolio foundation | [Live site](https://mcbridgeee.github.io/is373-portfolio/) · [repository](https://github.com/mcbridgeee/is373-portfolio) | observed hosted, Nov 23 |
+| Hosting and style decisions | [Decisions](1-portfolio-career.md#hosting-and-style-decisions) | done |
+| Site checks | [Checks](1-portfolio-career.md#checks) | keyboard, phone width, contrast observed locally; links observed in CI and hosted; peer checks planned |
 
 ### 2. RAG app + technical research
 
