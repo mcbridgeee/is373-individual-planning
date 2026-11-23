@@ -6,9 +6,18 @@
 
 ## Changed / checked / next
 
-- **Changed (Plan, Nov 16):** recorded three employer postings across three role families (FDE, UX research on AI, product management); compared UX research and PM; chose UX research on AI products as my provisional direction and a UX research hiring manager as my reader; mapped responsibilities to evidence; outlined the portfolio; chose story-first Layout B.
-- **Checked:** opened all three original postings on 2026-11-15 and confirmed they were live, with eligibility and qualifications recorded from the employer pages. No portfolio checks have run yet; site checks below are planned.
-- **Next:** build the portfolio foundation at portfolio.bmctiernan.com by Build (Nov 24): intro, direction, navigation and case study placeholders labeled as in progress.
+### Build (Nov 23)
+
+- **Changed:** built and hosted the portfolio foundation at [mcbridgeee.github.io/is373-portfolio](https://mcbridgeee.github.io/is373-portfolio/) ([repository](https://github.com/mcbridgeee/is373-portfolio)). It has my introduction and direction (UX research for AI products), navigation, Throughline and the group project labeled "in progress," my four existing research projects linking to their full case studies, and my résumé, LinkedIn, GitHub and email. I kept Layout B and hosted it as a static page on GitHub Pages instead of my DigitalOcean server; the reasons are under [hosting and style decisions](#hosting-and-style-decisions).
+- **Career finding that shaped the site:** the two AI-focused postings, the Google FDE internship (P1) and the ServiceNow UX research internship (P2), both ask for checking AI output against its source data. Because that is the skill I most want a hiring manager to see, the intro names UX research for AI products as my direction and Throughline, an AI app I'm evaluating against its own sources, is the first featured project.
+- **Checked:** HTML validates and every local link, image and anchor exists (observed locally and in CI on [PR #2](https://github.com/mcbridgeee/is373-portfolio/pull/2)). At 375 px wide there is no sideways scrolling, Tab reaches every link in order with a visible focus outline, and text contrast is at least 8:1 (observed locally, Nov 23). The live page loads with its résumé, images and every link responding (observed hosted, Nov 23). Peer checks are still planned.
+- **Next (Checked Release, Dec 3):** write the Throughline case study with its evaluation result, write the group case study naming my contribution, add a one-line finding under each research project, give Throughline a demo that doesn't need a sign-in, and update my résumé. The peer test and retest follow at Improve (Dec 10).
+
+### Plan (Nov 16)
+
+- **Changed:** recorded three employer postings across three role families (FDE, UX research on AI, product management); compared UX research and PM; chose UX research on AI products as my provisional direction and a UX research hiring manager as my reader; mapped responsibilities to evidence; outlined the portfolio; chose story-first Layout B.
+- **Checked:** opened all three original postings on 2026-11-15 and confirmed they were live, with eligibility and qualifications recorded from the employer pages.
+- **Next:** build the portfolio foundation by Build (Nov 24): intro, direction, navigation and case study placeholders labeled as in progress.
 
 ## Employer posting records
 
@@ -119,7 +128,7 @@ Requirement: three original employer postings, at least two role families, FDE i
 
 Required content: accurate introduction, individual RAG case study with a link to the working app, group case study naming my own contribution, code/demo links, resume / GitHub / LinkedIn links, and a professional contact route. Public pages must work without making a recruiter create an account.
 
-**Planned URL:** portfolio.bmctiernan.com on my existing DigitalOcean server (planned; not built yet).
+**Hosted URL:** [mcbridgeee.github.io/is373-portfolio](https://mcbridgeee.github.io/is373-portfolio/) (observed hosted, Nov 23). The Plan stage proposed portfolio.bmctiernan.com on my DigitalOcean server; see the decision below.
 
 1. **Home:** one-line direction (UX researcher on AI products), short intro, links to case studies and contact.
 2. **RAG app case study:** problem and reader, research and architecture choice, evaluation results, what I changed after peer testing, link to the working app and code. Under the title, one line saying what I evaluated and what I found, written only after the checks run (placeholder: "I tested whether the app's answers were supported by the sessions they cited: [result]"). From Dhruvi's feedback ([#1](https://github.com/mcbridgeee/is373-individual-planning/issues/1)).
@@ -140,17 +149,26 @@ Same content, two treatments. Wireframes only; I do not build two sites.
 
 **Choice and reason:** Layout B (story-first), provisional; I'll revisit it after peer feedback at Build. My reader is a UX research hiring manager. In a field where so much is now AI-generated, I want to come across as a real, personable human: who I am, what I care about, how I work, and why I chose this path. B leads with that, then puts my most recent and best work (the RAG case study) front and center. **Trade-off I'm accepting:** case studies sit lower than in Layout A, so a fast skimmer might leave before seeing work. **Check:** at the peer test, see whether a reviewer reaches a case study without help; if not, move the featured project higher.
 
-## Planned checks
+## Hosting and style decisions
+
+- **Hosting:** the course brief suggests reusing my FastAPI app, brand, server and CI where suitable. I compared reusing my App Studio FastAPI app on my DigitalOcean server with a static page on GitHub Pages. Because the portfolio is public content with no accounts or data, FastAPI would add login code and a server deploy the site doesn't need, so I chose the static page and kept CI (HTML and link checks on every pull request). **Trade-off:** the site isn't on my own domain yet; I can point a subdomain at it later.
+- **Style:** I considered a Windows XP desktop theme and set it aside for now, because draggable windows are hard to make work at phone width and with a keyboard. I chose a neo-brutalist look (thick borders, flat bright colors, bold type), which keeps the personality Layout B is meant to show while scoring high on contrast. **Check:** the peer test will show whether the style helps or distracts.
+
+## Checks
 
 | Check | Expected result | Status |
 | --- | --- | --- |
-| Peer can name my target role from the homepage without help | Says "UX research on AI products" within about 30 seconds | planned |
-| Peer can find evidence of one skill | Opens a case study that shows a research method and its result | planned |
-| Peer can open a featured project | Reaches the RAG case study from the homepage in one or two clicks | planned |
-| Keyboard navigation reaches every link | Tab reaches every link and button in order, with a visible focus outline | planned |
-| Readable at phone width | No sideways scrolling and readable text at 375 px wide | planned |
+| Peer can name my target role from the homepage without help | Says "UX research on AI products" within about 30 seconds | planned (Dec 10) |
+| Peer can find evidence of one skill | Opens a case study that shows a research method and its result | planned (Dec 10) |
+| Peer can open a featured project | Reaches the RAG case study from the homepage in one or two clicks | planned (Dec 10) |
+| Keyboard navigation reaches every link | Tab reaches every link and button in order, with a visible focus outline | observed locally, Nov 23 |
+| Readable at phone width | No sideways scrolling and readable text at 375 px wide | observed locally, Nov 23 |
+| Text contrast | At least 4.5:1 for all text | observed locally, Nov 23 (lowest 8:1) |
+| HTML and links | Valid HTML; every local link, image and anchor exists | observed in CI, Nov 23 |
+| Live site and links load | Page, résumé, images and outside links respond | observed hosted, Nov 23 |
 
 ## Help received
 
 - AI: Claude helped me find and verify current postings, summarize their responsibilities, draft the comparison wording and draw the layout wireframes. I checked the postings myself and made the direction, reader and layout decisions.
-- People: none yet. A peer review of my reader and evidence is planned for the Nov 17/19 workshop.
+- AI (Build): Claude helped me build the page and set up CI and GitHub Pages hosting. The content comes from my existing portfolio and this research, and I chose the direction, the style and the featured projects.
+- People: Dhruvi reviewed my portfolio plan ([#1](https://github.com/mcbridgeee/is373-individual-planning/issues/1)); a peer test of the live site is planned for Improve.
